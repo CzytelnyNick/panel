@@ -1,0 +1,52 @@
+{% extends 'base.html.twig' %}
+{% block head %}
+    <head>
+        <title>Sklep</title>
+
+        {% block stylesheets %}
+            <style>
+                .products__element {
+                    margin-bottom: 10px;
+                    border: 2px solid black;
+                    width: 25%;
+
+                    height: auto;
+                }
+                .products__element-description {
+                    font-size: 14px;
+                }
+                .products__element-image {
+                    width: 100px;
+                    height: 100px;
+                }
+            </style>
+        {% endblock %}
+    </head>
+{% endblock %}
+{% block body %}
+
+    <h1>Witaj!</h1>
+    {% for person in user %}
+            <li>{{ person.email }}</li>
+        {% endfor %}
+    <br>
+    <!-- Slider main container -->
+
+            {% for product in products %}
+
+                <div class="products__element">
+                    <img class="products__element-image" src="{{ "/uploads/" ~ product.attachment }}" alt="">
+                    <h1>{{ product.title }}</h1>
+                    <p class="products__element-description">{{ product.description }}</p>
+                </div>
+
+
+            {% endfor %}
+
+
+
+
+
+
+
+{% endblock %}

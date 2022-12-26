@@ -1,0 +1,12 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <h1>Witaj {{ user.email }}</h1>
+    <p>Co chciałbyś zrobić</p>
+    <a href="{{ path('admin_create') }}"><button class="btn btn-primary">Dodaj produkt</button></a>
+    <a href=""><button class="btn btn-primary">Wyślij email do użytkowników</button></a>
+    <a href="{{ path('admin_show') }}"><button class="btn btn-warning">Pokaż użytkowników</button></a>
+
+
+
+{% endblock %}
