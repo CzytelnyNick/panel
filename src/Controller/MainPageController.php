@@ -15,7 +15,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-
+#[Route('/user', name: 'user.')]
 class MainPageController extends AbstractController
 {
 
@@ -31,6 +31,14 @@ class MainPageController extends AbstractController
             'products' => $products
         ]);
     }
-
+    #[Route('/profile', name: 'profile')]
+    public function profile(UserRepository $userRepository)
+    {
+        $user = $userRepository->findAll()[0];
+//        dd($user);
+        return $this->render('main_page/profile.html.twig', [
+            'user' => $user
+        ]);
+    }
 
 }

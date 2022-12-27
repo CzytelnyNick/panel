@@ -6,12 +6,15 @@ use App\Entity\Products;
 use App\Entity\User;
 use App\Form\CreateType;
 use App\Repository\UserRepository;
+use App\Services\emailSend\EmailSend;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
 use JetBrains\PhpStorm\NoReturn;
+use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 class AdminController extends AbstractController
@@ -39,9 +42,10 @@ class AdminController extends AbstractController
 
     }
     #[Route('/admin/panel', name: 'admin')]
-    public function admin(Request $request){
+    public function plan(UserRepository $userRepository){
+            $user = $userRepository->findAll();
+//        $user = $this->getUser();
 
-        $user = $this->getUser();
 //        dd($user);
         return $this->render('admin/admin.html.twig',
             [
@@ -59,5 +63,10 @@ class AdminController extends AbstractController
                 'users' => $users
             ]);
         }
+    #[Route('/admin/email', name: 'send_email')]
+    public function email(UserRepository $userRepository, EmailSend $email) {
+        $email->send("TEST TEST TEST", $userRepository);
+
+    }
 
 }
