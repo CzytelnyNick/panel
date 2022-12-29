@@ -10,14 +10,17 @@ use Symfony\Component\Mime\Address;
 
 class EmailSend
 {
-    public function __construct(EmailVerifier $emailVerifier)
+    private EmailVerifier $emailVerifier;
+    private UserRepository $userRepository;
+    public function __construct(EmailVerifier $emailVerifier, UserRepository $userRepository)
     {
         $this->emailVerifier = $emailVerifier;
+        $this->userRepository = $userRepository;
     }
 
-    public function send(string $text ,UserRepository $userRepository )
+    public function send(string $text)
     {
-        $user = $userRepository->findAll();
+        $user = $this->userRepository->findAll();
         foreach ($user as $el) {
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $el,
                 (new TemplatedEmail())

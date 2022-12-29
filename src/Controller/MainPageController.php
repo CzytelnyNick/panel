@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Admin;
 use App\Entity\Products;
 use App\Entity\User;
-use App\Form\AdminLoginType;
 use App\Repository\ProductsRepository;
 use App\Services\FileUploader;
 use App\Form\CreateType;
@@ -15,7 +14,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-#[Route('/user', name: 'user.')]
+//#[Route('/user', name: 'user.')]
 class MainPageController extends AbstractController
 {
 
