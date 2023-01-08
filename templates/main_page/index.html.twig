@@ -5,13 +5,7 @@
 
         {% block stylesheets %}
             <style>
-                .products__element {
-                    margin-bottom: 10px;
-                    border: 2px solid black;
-                    width: 25%;
-
-                    height: auto;
-                }
+               
                 .products__element-description {
                     font-size: 14px;
                 }
@@ -26,21 +20,24 @@
 {% block body %}
 
     <h1>Witaj!</h1>
-    {% for person in user %}
-            <li>{{ person.email }}</li>
-        {% endfor %}
+
     <br>
     <!-- Slider main container -->
 
             {% for product in products %}
 
-                <div class="products__element">
-                    <img class="products__element-image" src="{{ "/uploads/" ~ product.attachment }}" alt="">
-                    <h1>{{ product.title }}</h1>
-                    <p class="products__element-description">{{ product.description }}</p>
+                <div class="card" style="width: 18rem;">
+                    <img class="card-img-top" src="{{ "/uploads/" ~ product.attachment }}" alt="Card image cap">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ product.title }}</h5>
+                        <div class="card-text"><p class="products__element-description">{{ product.description }}</p></div>
+                        <a href="{{ path('products', {id: product.id}) }}"><button class="btn btn-primary">Więcej Informacji</button></a>
+                        {% if(is_granted("ROLE_ADMIN"))%}
+                            <a href="{{ path("admin_product_delete", {id: product.id}) }}"><button class="btn btn-danger">Usuń</button></a>
+                        {% endif %}
+                    </div>
                 </div>
-
-
+                <br>
             {% endfor %}
 
 

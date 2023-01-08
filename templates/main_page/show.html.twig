@@ -1,0 +1,18 @@
+{% extends 'base.html.twig' %}
+{% block stylesheets %}
+    <link rel="stylesheet" href="{{ asset('/css/style.css') }}">
+{% endblock %}
+{% block body %}
+
+    <img class="products__image" src="{{"/uploads/" ~ product.attachment }}" alt="">
+    <h1>{{ product.title }}</h1>
+    <p>Opis: {{ product.description }}</p>
+
+    <p>Ilość: {{ product.count }}</p>
+    {% if(product.count == 0) %}
+    <p>Dostępne: {{ product.sold_out }}</p>
+    {% endif %}
+    <p>Cena: {{ product.price }} zł</p>
+
+    <a href=""><button class="btn btn-success">Kup</button></a>
+{% endblock %}

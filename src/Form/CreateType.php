@@ -4,11 +4,15 @@ namespace App\Form;
 
 use App\Entity\Sold;
 use Doctrine\DBAL\Types\BooleanType;
+use Doctrine\DBAL\Types\TextType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use Symfony\Component\Console\Descriptor\TextDescriptor;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
+use Symfony\Component\Form\Extension\Core\Type\MoneyType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,15 +25,24 @@ class CreateType extends AbstractType
 //                'mapped' => false
             ])
             ->add('Title')
-            ->add('Description')
-            ->add('Price')
-            ->add('Count')
+            ->add('Description',TextareaType::class,[
+                'attr' => ['required'   => false,]
+            ])
+            ->add('Price', MoneyType::class, [
+                'attr' => ['required'   => false,],
+
+            ])
+            ->add('Count', null, [
+                'attr' => ['required'   => false,]
+            ])
             ->add('SoldOut', ChoiceType::class, [
                 'choices'  => [
                     'YES' => true,
                     'NO' => false,
-                ]])
-            ->add("SUBMIT", SubmitType::class, [
+                ],
+                'attr' => ['required'   => false]])
+
+            ->add("Submit", SubmitType::class, [
                 'attr' =>
                     ['class' => 'btn btn-success float-end']])
 

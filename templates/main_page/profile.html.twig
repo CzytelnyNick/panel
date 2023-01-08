@@ -2,9 +2,9 @@
 
 
     {% block body %}
-        <h1>Witaj {{ user.name }}!</h1>
-        <p>Email: {{ user.email }}</p>
-        <p>Hasło: ***********</p>
+        <h1>Witaj {{ user.getName() }}!</h1>
+        <p>Email: {{ user.getEmail() }}</p>
+        <p>Hasło: *********** <a href="{{ path('change_password') }}"><button class="btn btn-warning">Zmień hasło</button></a></p>
 
 
     {% endblock %}

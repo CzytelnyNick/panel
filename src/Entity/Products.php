@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\ProductsRepository;
 use Doctrine\ORM\Mapping as ORM;
+use PhpParser\Node\Expr\Cast\Double;
 
 #[ORM\Entity(repositoryClass: ProductsRepository::class)]
 class Products
@@ -23,13 +24,13 @@ class Products
     private ?string $description = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $price = null;
+    private ?float $price = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $count = null;
+    private ?int $count = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $sold_out = null;
+    private ?int $sold_out = null;
 
     public function getId(): ?int
     {
@@ -72,36 +73,36 @@ class Products
         return $this;
     }
 
-    public function getPrice(): ?string
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(string $price): self
+    public function setPrice(float $price): self
     {
         $this->price = $price;
 
         return $this;
     }
 
-    public function getCount(): ?string
+    public function getCount(): ?int
     {
         return $this->count;
     }
 
-    public function setCount(string $count): self
+    public function setCount(int $count): self
     {
         $this->count = $count;
 
         return $this;
     }
 
-    public function getSoldOut(): ?string
+    public function getSoldOut(): ?int
     {
         return $this->sold_out;
     }
 
-    public function setSoldOut(string $sold_out): self
+    public function setSoldOut(int $sold_out): self
     {
         $this->sold_out = $sold_out;
 

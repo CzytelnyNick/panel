@@ -7,13 +7,13 @@ use App\Entity\Products;
 use App\Entity\User;
 use App\Form\CreateType;
 use App\Form\MessageType;
+use App\Repository\ProductsRepository;
 use App\Repository\UserRepository;
 use App\Security\EmailVerifier;
 use App\Services\emailSend\EmailSend;
 use App\Services\FileUploader;
 use Doctrine\ORM\EntityManagerInterface;
-use http\Params;
-use JetBrains\PhpStorm\NoReturn;
+
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,12 +32,30 @@ class AdminController extends AbstractController
         $form->handleRequest($request);
         if ($form->isSubmitted()) {
 
-
+//
             $file = $request->files->get("create")["Attachment"];
             $filename = $fileUploader->uploadFiles($file);
             $products->setAttachment($filename);
             $entityManager->persist($products);
             $entityManager->flush();
+//            dd();
+            $id = $products->getId();
+            $user = $this->userRepository->findAll();
+            foreach ($user as $el) {
+                $this->emailVerifier->sendEmailConfirmation('app_verify_email', $el,
+                    (new TemplatedEmail())
+                        ->from(new Address('testowedamian1@gmail.com', 'Testowy Mail Bot'))
+                        ->to($el->getEmail())
+                        ->subject('Mamy nową wiadomość dla ciebie')
+
+//                    ->text("text")
+                        ->htmlTemplate('admin/new-product.html.twig')
+                        ->context([
+                            'id' => $id
+                            ])
+                );
+
+            }
             return $this->redirect($this->generateUrl('main_page'));
         }
 
@@ -61,7 +79,7 @@ class AdminController extends AbstractController
 
 
     #[Route('/admin/show', name: 'admin_show')]
-    public function show(UserRepository $userRepository) {
+    public function showUsers(UserRepository $userRepository) {
             $users = $userRepository->findAll();
 
             return $this->render('admin/show.html.twig', [
@@ -69,19 +87,15 @@ class AdminController extends AbstractController
             ]);
         }
 
-
-//    public function email(UserRepository $userRepository,) {
-//        $email = new EmailSend();
-//        $email->send("TEST TEST TEST");
 //
-//    }
     private EmailVerifier $emailVerifier;
     private UserRepository $userRepository;
-    public function __construct(EmailVerifier $emailVerifier, UserRepository $userRepository)
+    public function __construct(EmailVerifier $emailVerifier, UserRepository $userRepository, Products $products)
     {
         $this->emailVerifier = $emailVerifier;
         $this->userRepository = $userRepository;
-        global $title;
+//        global $title;
+        $this->products = $products;
     }
 
     #[Route('/admin/email/', name: 'admin_email')]
@@ -137,5 +151,29 @@ class AdminController extends AbstractController
         return $this->redirect($this->generateUrl('admin'));
 
     }
+    #[Route('/admin/product/delete/{id}', name: 'admin_product_delete')]
+    public function delete(ProductsRepository $products, $id, EntityManagerInterface $entityManager){
+//        dd();
+        $products->remove($products->find($id), true);
 
+        $this->addFlash('success', 'Usunąłeś element');
+        return $this->redirect($this->generateUrl('main_page'));
+    }
+    #[Route('/admin/show/permission/{id}', name: 'admin_user_permission')]
+    public function grantPermission($id, UserRepository $userRepository, EntityManagerInterface $entityManager){
+        $user = $userRepository->find($id);
+//        dd($user->getRoles());
+        foreach($user->getRoles() as $el) {
+            if ($el == "ROLE_ADMIN") {
+                $this->addFlash("danger","Użytkownik ma już uprawnienia administratora");
+            } else {
+                $user->setRoles(["ROLE_ADMIN", "ROLE_USER"]);
+
+            }
+
+        }
+        $entityManager->flush();
+        return $this->redirect($this->generateUrl('admin_show'));
+//        $user->setRoles()
+    }
 }

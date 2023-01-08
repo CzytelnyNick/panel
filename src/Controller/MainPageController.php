@@ -10,6 +10,7 @@ use App\Services\FileUploader;
 use App\Form\CreateType;
 use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Bridge\Doctrine\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -33,11 +34,24 @@ class MainPageController extends AbstractController
     #[Route('/profile', name: 'profile')]
     public function profile(UserRepository $userRepository)
     {
-        $user = $userRepository->findAll()[0];
+        $user = $this->getUser();
 //        dd($user);
         return $this->render('main_page/profile.html.twig', [
             'user' => $user
         ]);
+    }
+
+    #[Route('/products/{id}', name: 'products')]
+    public function showProducts($id, ProductsRepository $productsRepository): Response
+    {
+        $products = $productsRepository->find($id);
+//        $id =$request->attributes->all()["id"];
+////        dd($request->attributes->all()["id"]);
+//        $products = $this->
+        return $this->render('main_page/show.html.twig', [
+            "product" => $products
+        ]);
+
     }
 
 }
